@@ -1,11 +1,21 @@
 import React, { useState } from "react";
-import '../Login/Login.css'
+import "../Login/Login.css";
 import { useNavigate } from "react-router-dom";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+
+
 function Login() {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [value, setValue] = React.useState("");
 
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
   const database = [
     {
       username: "user1",
@@ -25,12 +35,9 @@ function Login() {
   const handleSubmit = (event) => {
     //Prevent page reload
     event.preventDefault();
-
     var { uname, pass } = document.forms[0];
-
     // Find user login info
     const userData = database.find((user) => user.username === uname.value);
-
     // Compare user info
     if (userData) {
       if (userData.password !== pass.value) {
@@ -65,6 +72,28 @@ function Login() {
           <input type="password" name="pass" required />
           {renderErrorMessage("pass")}
         </div>
+        <div>
+          <FormControl>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              value={value}
+              onChange={handleChange}
+            >
+              <FormControlLabel
+                value="Admin"
+                control={<Radio />}
+                label="Admin"
+              />
+              <FormControlLabel
+                value="Doctor"
+                control={<Radio />}
+                label="Doctor"
+              />
+            </RadioGroup>
+          </FormControl>
+        </div>
         <div className="button-container">
           <input type="submit" />
         </div>
@@ -76,9 +105,11 @@ function Login() {
     <div className="app">
       <div className="login-form">
         <div className="title">Sign In</div>
-        {isSubmitted ? <div>User is successfully logged in
-          {navigate("/homepage", { replace: true })}
-        </div> : renderForm}
+        {isSubmitted
+          ? value === "Admin"
+            ? navigate("/admin")
+            : navigate("/homepage")
+          : renderForm}
       </div>
     </div>
   );

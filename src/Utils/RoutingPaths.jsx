@@ -1,6 +1,11 @@
-const routes = {
+const RoutingPaths = {
     Login:'/',
-    Homepage:'/homepage'
+    Homepage:'/homepage',
+    Admin:'/admin',
+    ManageDoctors:'/doctors',
+    ManagePatients:'/patients',
+    Appointments:'/appointments',
+
 }
 
-export default routes;
+export default RoutingPaths;
