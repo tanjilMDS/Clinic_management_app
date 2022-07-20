@@ -1,22 +1,31 @@
 {
   "doctors": [
     {
-      "name": "Tanjil",
-      "speciality": "Neuro surgeon",
-      "location": "UK",
-      "id": 2
-    },
-    {
-      "name": "Jubair",
+      "name": "Arun",
       "speciality": "Medicine",
-      "location": "UK",
+      "email": "arun.kumar@metadesignsolutions.co.uk",
+      "phone": "14654646",
+      "visitingHours": "1PM",
+      "password": "12345678",
       "id": 3
     },
     {
-      "name": "ee",
-      "speciality": "mm",
-      "location": "UK",
+      "name": "Jubair",
+      "speciality": "Bone specialist",
+      "email": "jubair@metadesignsolutions.co.uk",
+      "phone": "12345678",
+      "visitingHours": "4PM",
+      "password": "Password123@",
       "id": 4
+    },
+    {
+      "name": "Tanjil",
+      "speciality": "Sergeon",
+      "email": "tanjil.hossain@metadesignsolutions.co.uk",
+      "phone": "12345678",
+      "visitingHours": "7PM",
+      "password": "Password123@",
+      "id": 5
     }
   ],
   "patients": [
