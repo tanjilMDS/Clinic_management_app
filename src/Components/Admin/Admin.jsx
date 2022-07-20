@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import CardComponent from "./CardComponent";
 
 const Admin = () => {
-  const notesStore = useStore();
+  // const notesStore = useStore();
   const options = [
     {
       id: 1,
@@ -23,14 +23,14 @@ const Admin = () => {
       detail: `Add/Delete appointments`,
     },
   ];
-  const [notes, setNotes] = useState("");
-  const [id, setId] = useState(0);
-  const handleChange = (e) => {
-    setNotes(e.target.value);
-  };
-  const handleId = (e) => {
-    setId(e.target.value);
-  };
+  // const [notes, setNotes] = useState("");
+  // const [id, setId] = useState(0);
+  // const handleChange = (e) => {
+  //   setNotes(e.target.value);
+  // };
+  // const handleId = (e) => {
+  //   setId(e.target.value);
+  // };
   return (
     <div
       style={{
