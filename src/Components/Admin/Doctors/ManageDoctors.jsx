@@ -8,11 +8,23 @@ import { useStore } from "../../../Utils/Store/StoreContext";
 import { observer } from "mobx-react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import DialogueBox from "./DialogueBox";
+import DialogueBox from "../../../Utils/DialogueBox";
 import axios from "axios";
-import CustomSnackbar from "./Snackbar";
+import CustomSnackbar from "../../../Utils/Snackbar";
 import styles from "./ManageDoctors.module.scss";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+import {
+  PageWrapper,
+  Title,
+  Label,
+  Input,
+  StyledInlineErrorMessage,
+  Submit,
+  CodeWrapper,
+} from "../../../Utils/stylesForm";
+import { Stack } from "@mui/material";
 
 const muiCache = createCache({
   key: "mui-datatables",
@@ -31,51 +43,11 @@ const getMuiTheme = () =>
 
 function ManageDoctors() {
   const myTheme = getMuiTheme();
-  const [docName, setDocName] = useState("");
-  const [docSpeciality, setDocSpeciality] = useState("");
   const [open, setOpen] = React.useState(false);
   const [data, setData] = useState();
-
+  const [snackbar, setSnackbar] = React.useState(false);
   const [doctorsData, setDoctorsData] = useState(null);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/doctors")
-      .then((response) => {
-        setDoctorsData(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-  const handleClickOpen = (state) => {
-    setOpen(true);
-    setData(state);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const [snackbar, setSnackbar] = React.useState(false);
-
-  const handleClick = () => {
-    setSnackbar(true);
-  };
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setSnackbar(false);
-  };
-
-  const handleDocName = (e) => {
-    setDocName(e.target.value);
-  };
-  const handleDocSpeciality = (e) => {
-    setDocSpeciality(e.target.value);
-  };
   const addDocInfo = (
     name,
     speciality,
@@ -96,14 +68,51 @@ function ManageDoctors() {
       })
       .then((response) => {
         console.log(response);
-        setDocName("");
-        setDocSpeciality("");
         handleClick();
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/doctors")
+      .then((response) => {
+        setDoctorsData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [addDocInfo]);
+
+  const handleClickOpen = (state) => {
+    setOpen(true);
+    setData(state);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClick = () => {
+    setSnackbar(true);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbar(false);
+  };
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(2, "Your name is too short")
+      .required("Please enter your full name"),
+    email: Yup.string()
+      .email("The email is incorrect")
+      .required("Please enter your email"),
+  });
 
   const columns = [
     "ID",
@@ -140,37 +149,43 @@ function ManageDoctors() {
           <MUIDataTable
             title={"Doctor's list"}
             data={doctorsData?.map((item) => {
-              return [item.id, item.name, item.speciality,item.visitingHours, item.email,item.phone,item.password];
+              return [
+                item.id,
+                item.name,
+                item.speciality,
+                item.visitingHours,
+                item.email,
+                item.phone,
+                item.password,
+              ];
             })}
             columns={columns}
             options={options}
           />
         </ThemeProvider>
       </CacheProvider>
-      <Formik
-        initialValues={{
-          name: "",
-          speciality: "",
-          visitingHours: "",
-          email: "",
-          password: "",
-          phone: "",
+      <PageWrapper
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+
+          width: "100%",
         }}
-        validate={(values) => {
-          const errors = {};
-          if (!values.email) {
-            errors.email = "Required";
-          } else if (
-            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-          ) {
-            errors.email = "Invalid email address";
-          }
-          return errors;
-        }}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            // alert(JSON.stringify(values, null, 2));
-            // console.log(values)
+      >
+        <Formik
+          initialValues={{
+            name: "",
+            speciality: "",
+            visitingHours: "",
+            email: "",
+            password: "",
+            phone: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={(values, actions) => {
+            console.log(values);
             addDocInfo(
               values.name,
               values.speciality,
@@ -179,123 +194,153 @@ function ManageDoctors() {
               values.visitingHours,
               values.password
             );
-            setSubmitting(false);
-          }, 400);
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "column",
-              alignItems: "center",
-              marginTop: 20,
-              gap: 10,
-            }}
-          >
-            <Field
-              style={{ backgroundColor: "#F2F2F2", width: "30%" }}
-              placeholder="Doctor's Name"
-              type="text"
-              name="name"
-            />
-            <Field
-              style={{ width: "30%" }}
-              placeholder="Doctor's Speciality"
-              type="text"
-              name="speciality"
-            />
-            <Field
-              style={{ width: "30%" }}
-              placeholder="Visiting Hours"
-              type="text"
-              name="visitingHours"
-            />
-            <Field
-              style={{ width: "30%" }}
-              placeholder="Phone"
-              type="text"
-              name="phone"
-            />
-            <Field
-              style={{ width: "30%" }}
-              placeholder="Email"
-              type="email"
-              name="email"
-            />
-            <ErrorMessage name="email" component="div" />
-            <Field
-              style={{ width: "30%" }}
-              placeholder="Password"
-              type="password"
-              name="password"
-            />
-            <ErrorMessage name="password" component="div" />
-            <button type="submit" disabled={isSubmitting}>
-              Submit
-            </button>
-          </Form>
-        )}
-      </Formik>
-
-      {/* <div className={styles.textfieldContainer}>
-        <TextField
-          type="text"
-          placeholder="Enter Doctor's Name"
-          value={docName}
-          onChange={handleDocName}
-          sx={{ width: "30%" }}
-        />
-        <TextField
-          type="text"
-          placeholder="Enter Doctor's Speciality"
-          value={docSpeciality}
-          onChange={handleDocSpeciality}
-          sx={{ width: "30%" }}
-        />
-        <TextField
-          type="text"
-          placeholder="Visiting Hours"
-          value={docSpeciality}
-          onChange={handleDocSpeciality}
-          sx={{ width: "30%" }}
-        />
-        <TextField
-          type="text"
-          placeholder="Email"
-          value={docSpeciality}
-          onChange={handleDocSpeciality}
-          sx={{ width: "30%" }}
-        />
-        <TextField
-          type="text"
-          placeholder="Password"
-          value={docSpeciality}
-          onChange={handleDocSpeciality}
-          sx={{ width: "30%" }}
-        />
-        <TextField
-          type="text"
-          placeholder="Phone"
-          value={docSpeciality}
-          onChange={handleDocSpeciality}
-          sx={{ width: "30%" }}
-        />
-        <Button
-          sx={{ width: 150, padding: 1 }}
-          variant="contained"
-          onClick={addDocInfo}
+            const timeOut = setTimeout(() => {
+              actions.setSubmitting(false);
+              clearTimeout(timeOut);
+            }, 1000);
+          }}
         >
-          Add
-        </Button>
-        {open && (
-          <DialogueBox data={data} open={open} handleClose={handleClose} />
-        )}
-      </div> */}
+          {({
+            values,
+            errors,
+            touched,
+            handleSubmit,
+            isSubmitting,
+            isValidating,
+            isValid,
+          }) => {
+            return (
+              <>
+                <Form
+                  name="contact"
+                  method="post"
+                  onSubmit={handleSubmit}
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    flexDirection: "column",
+                  }}
+                >
+                  <div
+                    style={{ display: "flex", flexDirection: "row", gap: 10 }}
+                  >
+                    <Label htmlFor="name">
+                      Doctor's Name
+                      <Input
+                        type="text"
+                        name="name"
+                        autoCorrect="off"
+                        autoComplete="off"
+                        placeholder="Doctor's Name"
+                        valid={touched.name && !errors.name}
+                        error={touched.name && errors.name}
+                      />
+                    </Label>
+                    {errors.name && touched.name && (
+                      <StyledInlineErrorMessage>
+                        {errors.name}
+                      </StyledInlineErrorMessage>
+                    )}
+                    <Label htmlFor="speciality">
+                      Doctor's Speciality
+                      <Input
+                        type="text"
+                        name="speciality"
+                        autoCorrect="off"
+                        autoComplete="off"
+                        placeholder="Doctor's Speciality"
+                        valid={touched.name && !errors.name}
+                        error={touched.name && errors.name}
+                      />
+                    </Label>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", flexDirection: "row", gap: 10 }}
+                  >
+                    <Label htmlFor="visitingHours">
+                      Visiting Hours
+                      <Input
+                        type="text"
+                        name="visitingHours"
+                        autoCorrect="off"
+                        autoComplete="off"
+                        placeholder="Visiting Hours"
+                        valid={touched.name && !errors.name}
+                        error={touched.name && errors.name}
+                      />
+                    </Label>
+
+                    <Label htmlFor="phone">
+                      Phone
+                      <Input
+                        type="text"
+                        name="phone"
+                        autoCorrect="off"
+                        autoComplete="off"
+                        placeholder="Phone"
+                        valid={touched.name && !errors.name}
+                        error={touched.name && errors.name}
+                      />
+                    </Label>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", flexDirection: "row", gap: 10 }}
+                  >
+                    <Label htmlFor="email">
+                      Email
+                      <Input
+                        type="email"
+                        name="email"
+                        autoCapitalize="off"
+                        autoCorrect="off"
+                        autoComplete="off"
+                        placeholder="Doctor's email"
+                        valid={touched.email && !errors.email}
+                        error={touched.email && errors.email}
+                      />
+                    </Label>
+                    <ErrorMessage name="email">
+                      {(msg) => (
+                        <StyledInlineErrorMessage>
+                          {msg}
+                        </StyledInlineErrorMessage>
+                      )}
+                    </ErrorMessage>
+                    <Label htmlFor="visitingHours">
+                      Password
+                      <Input
+                        type="password"
+                        name="password"
+                        autoCorrect="off"
+                        autoComplete="off"
+                        placeholder="password"
+                        valid={touched.name && !errors.name}
+                        error={touched.name && errors.name}
+                      />
+                    </Label>
+                  </div>
+
+                  <Stack spacing={2} style={{ display: "flex", marginTop: 10 }}>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      disabled={!isValid || isSubmitting}
+                    >
+                      {isSubmitting ? `Adding...` : `Add`}
+                    </Button>
+                  </Stack>
+                </Form>
+              </>
+            );
+          }}
+        </Formik>
+      </PageWrapper>
+
       {open && (
-          <DialogueBox data={data} open={open} handleClose={handleClose} />
-        )}
+        <DialogueBox data={data} open={open} handleClose={handleClose} />
+      )}
       {snackbar && (
         <CustomSnackbar
           text="Doctor's info added successfully"

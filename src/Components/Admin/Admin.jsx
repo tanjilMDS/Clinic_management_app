@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import { useStore } from "../../Utils/Store/StoreContext";
+import React from "react";
 import { observer } from "mobx-react";
-import CardComponent from "./CardComponent";
+import CardComponent from "../../Utils/CardComponent";
+import doctorIcon from '../../Files/img/doctor.png'
+import patientIcon from '../../Files/img/patient.png'
+import appointmentIcon from '../../Files/img/appointment.png'
 
 const Admin = () => {
   // const notesStore = useStore();
@@ -10,17 +12,20 @@ const Admin = () => {
       id: 1,
       title: "Manage Doctors",
       detail: `Manage doctor's info from here`,
+      image:doctorIcon
     },
 
     {
       id: 2,
       title: "Manage Patients",
       detail: `Manage patient's info from here`,
+      image:patientIcon
     },
     {
       id: 3,
       title: "Appointments",
       detail: `Add/Delete appointments`,
+      image:appointmentIcon
     },
   ];
   // const [notes, setNotes] = useState("");
@@ -45,7 +50,7 @@ const Admin = () => {
       {options.map((item, i) => {
         return (
           <div key={i}>
-            <CardComponent title={item.title} details={item.detail} id={item.id} />
+            <CardComponent img={item.image} title={item.title} details={item.detail} id={item.id} />
           </div>
         );
       })}

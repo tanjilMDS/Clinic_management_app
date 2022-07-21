@@ -5,9 +5,9 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import RoutingPaths from "../../Utils/RoutingPaths";
+import RoutingPaths from "./RoutingPaths";
 
-export default function CardComponent({ title, details, id }) {
+export default function CardComponent({ title, details, id, img }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -22,12 +22,15 @@ export default function CardComponent({ title, details, id }) {
   return (
     <Card sx={{ maxWidth: 345 }} onClick={handleClick}>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="140"
-          image="https://media.istockphoto.com/vectors/illustration-icon-with-the-concept-of-looking-for-health-information-vector-id1151608262?k=20&m=1151608262&s=612x612&w=0&h=KLkWc3WKFkWhQFzyWLkOF7nednl0-JsTgVzpGEj0F38="
-          alt="green iguana"
-        />
+        <div style={{ display: "flex", justifyContent: "center",padding:10 }}>
+          <CardMedia
+            sx={{ width: "60%", height: "100%" }}
+            component="img"
+            image={img}
+            alt="green iguana"
+          />
+        </div>
+
         <CardContent>
           <Typography
             gutterBottom
