@@ -26,25 +26,36 @@
       "visitingHours": "7pm",
       "password": "Pass@1237668",
       "id": 7
-    },
-    {
-      "name": "test",
-      "speciality": "asdfa",
-      "email": "test@test.com",
-      "phone": "654",
-      "visitingHours": "4pm",
-      "password": "Password123@",
-      "id": 8
     }
   ],
   "patients": [
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "patientsName": "Demo test",
+      "DOB": "6/18/2013",
+      "age": "9 Years 1 Months",
+      "sex": "Male",
+      "location": "Dhaka",
+      "history": "Bone problem",
+      "id": 2
+    },
+    {
+      "patientsName": "Arun",
+      "DOB": "10/6/2002",
+      "age": "19 Years -4 Months",
+      "sex": "Male",
+      "location": "India",
+      "history": "Nothing",
+      "id": 3
+    },
+    {
+      "patientsName": "Sabrina",
+      "DOB": "1/21/2022",
+      "age": "0 Years 6 Months",
+      "sex": "Female",
+      "location": "Dhaka",
+      "history": "Head injury",
+      "id": 4
     }
   ],
-  "appointments": {
-    "name": "typicode"
-  }
+  "appointments": []
 }

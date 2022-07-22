@@ -112,7 +112,7 @@ export default function DialogueBox(props) {
       onClose={props.handleClose}
       TransitionComponent={Transition}
     >
-      <AppBar sx={{ position: "relative", backgroundColor: "skyblue" }}>
+      <AppBar sx={{ position: "relative", backgroundColor: "#B7DFE1" }}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -135,6 +135,9 @@ export default function DialogueBox(props) {
           alignItems: "center",
           marginTop: 20,
           width: "100%",
+          backgroundColor:'#b5c2c9',
+          borderRadius:10
+
         }}
       >
         <Formik
@@ -183,6 +186,7 @@ export default function DialogueBox(props) {
                     display: "flex",
                     width: "100%",
                     flexDirection: "column",
+                    
                   }}
                 >
                  
@@ -278,13 +282,15 @@ export default function DialogueBox(props) {
                       variant="contained"
                       type="submit"
                       disabled={!isValid || isSubmitting}
+                      sx={{backgroundColor:'#313639'}}
                     >
                       {isSubmitting ? `Updating...` : `Update`}
                     </Button>
                     <Button
-                      style={{ backgroundColor: "red" }}
+                      style={{ backgroundColor: "#DC3545" }}
                       variant="contained"
                       onClick={handleDelete}
+
                     >
                       Delete
                     </Button>

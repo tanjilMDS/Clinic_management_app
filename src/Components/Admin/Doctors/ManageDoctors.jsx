@@ -4,15 +4,15 @@ import { ThemeProvider } from "@mui/material/styles";
 import { createTheme } from "@mui/material/styles";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
-import { useStore } from "../../../Utils/Store/StoreContext";
 import { observer } from "mobx-react";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import DialogueBox from "../../../Utils/DialogueBox";
+import DialogueBox from "../../../Utils/DialogueBoxDoctor";
 import axios from "axios";
 import CustomSnackbar from "../../../Utils/Snackbar";
 import styles from "./ManageDoctors.module.scss";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useSelector } from "react-redux/es/exports";
+import { useDispatch } from "react-redux/es/hooks/useDispatch";
 import * as Yup from "yup";
 
 import {
@@ -25,21 +25,30 @@ import {
   CodeWrapper,
 } from "../../../Utils/stylesForm";
 import { Stack } from "@mui/material";
-
+import { increment } from "../../../Utils/Services/counterSlice";
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 const muiCache = createCache({
   key: "mui-datatables",
   prepend: true,
 });
 const getMuiTheme = () =>
-  createTheme({
-    overrides: {
-      MUIDataTable: {
-        responsiveScrollMaxHeight: {
-          maxHeight: "400px !important",
-        },
+createMuiTheme({
+  overrides: {
+    MUIDataTable: {
+      root: {
+        backgroundColor: "#FF000"
       },
+      paper: {
+        boxShadow: "none"
+      }
     },
-  });
+    MUIDataTableBodyCell: {
+      root: {
+        backgroundColor: "#FF0000"
+      }
+    }
+  }
+});
 
 function ManageDoctors() {
   const myTheme = getMuiTheme();
@@ -47,6 +56,8 @@ function ManageDoctors() {
   const [data, setData] = useState();
   const [snackbar, setSnackbar] = React.useState(false);
   const [doctorsData, setDoctorsData] = useState(null);
+  const count = useSelector((state) => state.myCounter);
+  const dispatch = useDispatch();
 
   const addDocInfo = (
     name,
@@ -56,7 +67,6 @@ function ManageDoctors() {
     visitingHours,
     password
   ) => {
-    // store.AddDoctor(docName, docSpeciality, "Dhaka");
     axios
       .post("http://localhost:8000/doctors", {
         name: name,
@@ -83,7 +93,7 @@ function ManageDoctors() {
       .catch((error) => {
         console.log(error);
       });
-  }, [addDocInfo]);
+  }, []);
 
   const handleClickOpen = (state) => {
     setOpen(true);
@@ -145,8 +155,9 @@ function ManageDoctors() {
   return (
     <div>
       <CacheProvider value={muiCache}>
-        <ThemeProvider theme={myTheme}>
+        <MuiThemeProvider  theme={getMuiTheme()}>
           <MUIDataTable
+            
             title={"Doctor's list"}
             data={doctorsData?.map((item) => {
               return [
@@ -162,15 +173,15 @@ function ManageDoctors() {
             columns={columns}
             options={options}
           />
-        </ThemeProvider>
+        </MuiThemeProvider>
       </CacheProvider>
+      <div className={styles.tableContainer}>
       <PageWrapper
         style={{
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
           alignItems: "center",
-
           width: "100%",
         }}
       >
@@ -216,9 +227,10 @@ function ManageDoctors() {
                   method="post"
                   onSubmit={handleSubmit}
                   style={{
-                    display: "flex",
                     width: "100%",
-                    flexDirection: "column",
+                    backgroundColor:'#b5c2c9',
+                    padding:10,
+                    borderRadius:10
                   }}
                 >
                   <div
@@ -327,6 +339,7 @@ function ManageDoctors() {
                       variant="contained"
                       type="submit"
                       disabled={!isValid || isSubmitting}
+                      sx={{backgroundColor:'#313639'}}
                     >
                       {isSubmitting ? `Adding...` : `Add`}
                     </Button>
@@ -337,6 +350,8 @@ function ManageDoctors() {
           }}
         </Formik>
       </PageWrapper>
+      </div>
+
 
       {open && (
         <DialogueBox data={data} open={open} handleClose={handleClose} />
@@ -351,4 +366,4 @@ function ManageDoctors() {
     </div>
   );
 }
-export default observer(ManageDoctors);
+export default ManageDoctors;

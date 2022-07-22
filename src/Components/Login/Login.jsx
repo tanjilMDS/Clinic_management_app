@@ -17,13 +17,10 @@ function Login() {
   };
   const database = [
     {
-      username: "user1",
-      password: "pass1",
+      username: "admin@admin.com",
+      password: "root",
     },
-    {
-      username: "user2",
-      password: "pass2",
-    },
+
   ];
 
   const errors = {

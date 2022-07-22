@@ -20,7 +20,7 @@ export default function CardComponent({ title, details, id, img }) {
     }
   };
   return (
-    <Card sx={{ maxWidth: 345 }} onClick={handleClick}>
+    <Card sx={{ maxWidth: 345,borderRadius:5 }} onClick={handleClick}>
       <CardActionArea>
         <div style={{ display: "flex", justifyContent: "center",padding:10 }}>
           <CardMedia

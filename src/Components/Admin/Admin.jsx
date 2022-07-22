@@ -4,6 +4,7 @@ import CardComponent from "../../Utils/CardComponent";
 import doctorIcon from '../../Files/img/doctor.png'
 import patientIcon from '../../Files/img/patient.png'
 import appointmentIcon from '../../Files/img/appointment.png'
+import bg from '../../Files/img/bgAdmin.jpg'
 
 const Admin = () => {
   // const notesStore = useStore();
@@ -28,23 +29,19 @@ const Admin = () => {
       image:appointmentIcon
     },
   ];
-  // const [notes, setNotes] = useState("");
-  // const [id, setId] = useState(0);
-  // const handleChange = (e) => {
-  //   setNotes(e.target.value);
-  // };
-  // const handleId = (e) => {
-  //   setId(e.target.value);
-  // };
   return (
     <div
       style={{
         display: "flex",
         justifyContent: "center",
         gap: 30,
-        marginTop: 20,
         alignItems: "center",
-        height: "100vh",
+        backgroundImage: `url(${bg})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        width: '100vw',
+        height: '100vh'
       }}
     >
       {options.map((item, i) => {
@@ -55,44 +52,6 @@ const Admin = () => {
         );
       })}
     </div>
-    // <div style={{ backgroundColor: "black" }}>
-    //   <input
-    //     type="text"
-    //     value={notes}
-    //     onChange={handleChange}
-    //     placeholder="Enter Note"
-    //   />
-    //   <input type="number" value={id} onChange={handleId} placeholder="ID" />
-    //   <button
-    //     style={{ fontSize: 20 }}
-    //     onClick={() => notesStore.addNote(notes, id)}
-    //   >
-    //     Add Note
-    //   </button>
-    //   <button
-    //     style={{ fontSize: 20 }}
-    //     onClick={() => notesStore.removeNote(id)}
-    //   >
-    //     Remove
-    //   </button>
-    //   <div
-    //     style={{
-    //       display: "flex",
-    //       justifyContent: "center",
-    //       flexDirection: "column",
-    //       alignItems: "center",
-    //     }}
-    //   >
-    //     {notesStore.notes.map((item, i) => {
-    //       return (
-    //         <h1 style={{ color: notesStore.ButtonState?'white':'yellow' }} key={i}>
-    //           {item.text}
-    //         </h1>
-    //       );
-    //     })}
-    //     <button onClick={()=>notesStore.setButtonState(!notesStore.ButtonState)}>{notesStore.ButtonState?'ON':'OFF'}</button>
-    //   </div>
-    // </div>
   );
 };
 export default observer(Admin);
